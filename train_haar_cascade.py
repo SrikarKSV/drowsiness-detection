@@ -39,17 +39,14 @@ with open("pos.vec", "wb") as f:
 
 # Train the Haar Cascade classifier
 params = {
-    "numPos": num_of_pos_samples,
-    "numNeg": num_of_neg_samples,
-    "numStages": 20,
-    "featureType": cv2.HaarCascadeClassifier.LBP,
-    "minHitRate": 0.999,
-    "maxFalseAlarmRate": 0.5,
-    "w": width,
-    "h": height,
-    "numThreads": 2,
-    "precalcValBufSize": 5120,
-    "precalcIdxBufSize": 5120,
+    "winSize": (width, height),
+    "maxLevel": 64,
+    "hitThreshold": 0.5,
+    "scaleFactor": 1.05,
+    "winSigma": 1.2,
+    "padding": (8, 8),
+    "groupThreshold": 2,
+    "histogramNormType": cv2.HOGDescriptor.L2Hys,
 }
 
 classifier = cv2.CascadeClassifier()
