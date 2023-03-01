@@ -11,27 +11,31 @@ width = 25
 height = 25
 
 num_of_neg_samples = 0
-for img in os.listdir(neg_dir):
-    line = neg_dir + img + "\n"
-    with open("bg.txt", "a") as f:
+with open("bg.txt", "a") as f:
+    for img in os.listdir(neg_dir):
+        line = os.path.join(neg_dir, img) + "\n"
         f.write(line)
-
-    num_of_neg_samples += 1
+        num_of_neg_samples += 1
 
 num_of_pos_samples = 0
-for img in os.listdir(pos_dir):
-    line = pos_dir + img + " 1 0 0 96 96\n"
-
-    with open("pos.info", "a") as f:
+with open("pos.info", "a") as f:
+    for img in os.listdir(pos_dir):
+        line = os.path.join(pos_dir, img) + f" 1 0 0 {width} {height}\n"
         f.write(line)
-
-    num_of_pos_samples += 1
-
+        num_of_pos_samples += 1
 
 # Create the positive samples vector file
-os.system(
-    f"opencv_createsamples -info pos.info -num {num_of_pos_samples} -w {width} -h {height} -maxxangle 0.7 -maxyangle 0.7 -maxzangle 0.7 -vec pos.vec"
-)
+img_filenames = [line.split()[0] for line in open("pos.info").readlines()]
+with open("pos.vec", "wb") as f:
+    for filename in img_filenames:
+        img = cv2.imread(filename, cv2.IMREAD_GRAYSCALE)
+        resized_img = cv2.resize(img, (width, height))
+        cv2.imwrite("temp.png", resized_img)
+        with open("temp.png", "rb") as temp:
+            data = temp.read()
+            f.write(np.array([len(data)], dtype=np.int32).tobytes() + data)
+    os.remove("temp.png")
+
 
 # Train the Haar Cascade classifier
 params = {
