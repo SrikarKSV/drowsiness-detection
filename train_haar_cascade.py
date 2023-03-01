@@ -34,18 +34,19 @@ os.system(
 )
 
 # Train the Haar Cascade classifier
-params = cv2.CascadeClassifier_Params()
-params.numPos = num_of_pos_samples
-params.numNeg = num_of_neg_samples
-params.numStages = 20
-params.featureType = cv2.HaarCascadeClassifier.LBP
-params.minHitRate = 0.999
-params.maxFalseAlarmRate = 0.5
-params.w = width
-params.h = height
-params.numThreads = 2
-params.precalcValBufSize = 5120
-params.precalcIdxBufSize = 5120
+params = {
+    "numPos": num_of_pos_samples,
+    "numNeg": num_of_neg_samples,
+    "numStages": 20,
+    "featureType": cv2.HaarCascadeClassifier.LBP,
+    "minHitRate": 0.999,
+    "maxFalseAlarmRate": 0.5,
+    "w": width,
+    "h": height,
+    "numThreads": 2,
+    "precalcValBufSize": 5120,
+    "precalcIdxBufSize": 5120,
+}
 
 classifier = cv2.CascadeClassifier()
 classifier.train("pos.vec", "bg.txt", params=params)
