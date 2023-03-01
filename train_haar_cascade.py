@@ -39,18 +39,21 @@ with open("pos.vec", "wb") as f:
 
 # Train the Haar Cascade classifier
 params = {
-    "winSize": (width, height),
-    "maxLevel": 64,
-    "hitThreshold": 0.5,
-    "scaleFactor": 1.05,
-    "winSigma": 1.2,
-    "padding": (8, 8),
-    "groupThreshold": 2,
-    "histogramNormType": cv2.HOGDescriptor.L2Hys,
+    "numPos": num_of_pos_samples,
+    "numNeg": 0,  # no negative images used in opencv_createsamples command
+    "numStages": 20,
+    "minHitRate": 0.999,
+    "maxFalseAlarmRate": 0.5,
+    "w": 25,
+    "h": 25,
+    "maxxangle": 0.7,
+    "maxyangle": 0.7,
+    "maxzangle": 0.7,
+    "vec": "pos.vec",
 }
 
 classifier = cv2.CascadeClassifier()
-classifier.train("pos.vec", "bg.txt", params=params)
+classifier.train("bg.txt", params=params)
 
 # Save the trained classifier
 classifier.save("face_classifier.xml")
